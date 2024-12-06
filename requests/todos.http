@@ -1,0 +1,14 @@
+GET http://185.143.179.57:8080/todos
+
+###
+
+POST http://185.143.179.57:8080/todos
+
+{"id": 2,"text": "Wash dishes","completed": false}
+
+###
+
+DELETE http://admin:admin@185.143.179.57:8080/todos/2
+
+###
+

@@ -170,4 +170,4 @@ hs_err_pid*
 .gradletasknamecache
 
 # Envs
-src/test/resources/application.prod.conf
+src/test/resources/application.conf
