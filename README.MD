@@ -34,12 +34,18 @@ Before running the tests, you need to configure the project by following these s
 
 ## Running Tests
 
+### First, please run docker container with the required image
+
+```shell
+./gradlew restartDockerContainer
+```
+
 ### API Tests
 
 To run API tests, execute the following command:
 
   ```shell
-  ./gradlew test
+  ./gradlew test --info
   ```
 
 The results will be available in the `build/test-results/test` directory.
@@ -51,7 +57,10 @@ The project uses Gatling for load testing.
 
 #### !!! IMPORTANT !!!
 
-It's recommended to restart the service before load testing begins
+It's recommended to restart the service before load testing begins:
+    ```shell
+    ./gradlew restartDockerContainer
+    ```
 
 To execute load tests:
 

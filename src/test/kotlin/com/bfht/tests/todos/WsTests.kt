@@ -1,6 +1,7 @@
 package com.bfht.tests.todos
 
 import com.bfht.tests.SetupTests
+import commons.models.Todo
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -16,7 +17,7 @@ import kotlinx.coroutines.test.runTest
 class WsTests : SetupTests() {
 
     @BeforeTest
-    fun setUpSocket(): Unit = runBlocking {
+    fun setUpWs(): Unit = runBlocking {
         ws.listen()
         delay(1000)
     }
@@ -43,8 +44,22 @@ class WsTests : SetupTests() {
         assertEquals(todoNotes["feed"], messages[1].data)
     }
 
+    @Test
+    fun `should not receive two events from websocket when modified`() = runTest {
+        val todo = mapOf(
+            "not_completed" to Todo(id = 5, text = "cleanup room", completed = false),
+            "completed" to Todo(id = 5, text = "cleanup room", completed = true),
+        )
+        service.postTodos(todo["not_completed"])
+        service.putTodos(todo["completed"])
+
+        val messages = ws.awaitMessagesWs(1)
+        assertTrue(messages.isNotEmpty())
+        assertEquals(todo["not_completed"], messages[0].data)
+    }
+
     @AfterTest
-    fun tearDown(): Unit = runBlocking {
+    fun tearDownWs(): Unit = runBlocking {
         ws.stopListening()
     }
 

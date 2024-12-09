@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+
 plugins {
     kotlin("jvm") version "2.1.0"
     id("io.gatling.gradle") version "3.13.1"
@@ -16,9 +18,9 @@ kotlin {
 }
 
 java {
-  toolchain {
-    languageVersion.set(JavaLanguageVersion.of(17))
-  }
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
 
 dependencies {
@@ -47,19 +49,36 @@ dependencies {
 
     // Configuration manager
     testImplementation("io.github.config4k:config4k:0.7.0")
-
-    // SSH
-    testImplementation("com.jcraft:jsch:0.1.55")
 }
 
 tasks.test {
     useJUnitPlatform()
     maxParallelForks = 1
-    testLogging.showStandardStreams = true
+
+    testLogging {
+        events("PASSED", "FAILED", "SKIPPED")
+        showStandardStreams = true
+        exceptionFormat = FULL
+    }
 }
 
 gatling {
-  includeMainOutput = true
-  includeTestOutput = true
+    includeMainOutput = true
+    includeTestOutput = true
+}
+
+tasks.register<Exec>("startDockerContainer") {
+    group = "Docker"
+    description = "Start the Docker container for the application under test"
+    commandLine("sh", "-c", " docker run -d --rm --name bfht -e VERBOSE=1 -p 8080:4242 todo-app:latest")
+}
+
+tasks.register<Exec>("restartDockerContainer") {
+    group = "Docker"
+    description = "Restart the Docker container for the application under test"
+    commandLine("sh", "-c", """
+        docker stop bfht || true &&
+        docker run -d --rm --name bfht -e VERBOSE=1 -p 8080:4242 todo-app:latest
+    """.trimIndent())
 }
 
