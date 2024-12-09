@@ -35,17 +35,17 @@ Before running the tests, you need to configure the project by following these s
 ## Running Tests
 
 ### First, please run docker container with the required image
-
-```shell
-./gradlew restartDockerContainer
-```
+It's recommended to start the service before testing begins:
+    ```shell
+    ./gradlew startDockerContainer
+    ```
 
 ### API Tests
 
 To run API tests, execute the following command:
 
   ```shell
-  ./gradlew test --info
+  ./gradlew clean test
   ```
 
 The results will be available in the `build/test-results/test` directory.
