@@ -2,8 +2,6 @@ package com.bfht.tests.todos
 
 import com.bfht.tests.SetupTests
 import commons.models.Todo
-import commons.models.TodosList
-import io.ktor.client.call.body
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlinx.coroutines.test.runTest
@@ -21,7 +19,7 @@ class SmokeTests : SetupTests() {
 
   @Test
   fun `should create a new todo note`() = runTest {
-    val response = service.postTodos(Todo(id = 1, text = "wash dishes", completed = false))
+    val response = service.postTodos(todo())
     assertEquals(201, response.status.value)
   }
 
