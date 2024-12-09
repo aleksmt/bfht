@@ -9,21 +9,21 @@ import kotlinx.serialization.json.Json
 
 
 val formatter = Json {
-  ignoreUnknownKeys = true
-  prettyPrint = true
-  explicitNulls = false
+    ignoreUnknownKeys = true
+    prettyPrint = true
+    explicitNulls = false
 }
 
 object HttpClientFactory {
-  fun create(): HttpClient = HttpClient(CIO) {
-    install(ContentNegotiation) {
-      json(formatter)
+    fun create(): HttpClient = HttpClient(CIO) {
+        install(ContentNegotiation) {
+            json(formatter)
+        }
     }
-  }
 }
 
 object WsClientFactory {
-  fun create(): HttpClient = HttpClient {
-    install(WebSockets)
-  }
+    fun create(): HttpClient = HttpClient {
+        install(WebSockets)
+    }
 }

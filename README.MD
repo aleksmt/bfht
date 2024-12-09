@@ -1,6 +1,7 @@
 # BFHT Testing Project (Kotlin-based)
 
 This project is a Kotlin-based testing framework designed to perform two types of tests:
+
 - **API Tests**: Functional tests to verify REST API functionality.
 - **Load Testing**: Performance tests using Gatling to evaluate the system under specified load conditions.
 
@@ -22,72 +23,98 @@ Before running the tests, you need to configure the project by following these s
     cp src/main/resources/application.example.conf src/main/resources/application.conf
     ```
 3. Update the following keys in `application.conf` to match your deployed environment:
-  - `service.restApiUrl`: The base URL of your REST API (e.g., `http://localhost:8080` for local Docker).
-  - `service.wsHost`: The WebSocket host (e.g., `http://localhost:8080` for local Docker).
-  - `service.auth.username`: The username for authentication.
-  - `service.auth.password`: The password for authentication.
+
+- `service.proto`: Either http or https.
+- `service.host`: The base URL of your REST API (e.g., `localhost` for local Docker).
+- `service.port`: TCP port (e.g., `8080` for local Docker).
+- `service.endpoints.ws`: The WebSocket endpoint (e.g., `/ws` for local Docker).
+- `service.endpoints.todo`: The REST API endpoint (e.g., `/todos` for local Docker).
+- `service.auth.username`: The username for authentication.
+- `service.auth.password`: The password for authentication.
 
 ## Running Tests
 
 ### API Tests
 
 To run API tests, execute the following command:
+
   ```shell
   ./gradlew test
   ```
 
-The results will be available in the `build/test-results/test` directory. Open the `.xml` files or use a test reporting tool to view the results.
+The results will be available in the `build/test-results/test` directory.
+Open the `.xml` files or use a test reporting tool to view the results.
 
 ### Load Tests
 
-The project uses Gatling for load testing. To execute load tests:
+The project uses Gatling for load testing.
 
-1. Ensure you have properly configured `application.conf`.
+#### !!! IMPORTANT !!!
+
+It's recommended to restart the service before load testing begins
+
+To execute load tests:
+
+1. Ensure you have properly configured `application.conf`
 2. Run the following command:
     ```shell
-    ./gradlew gatlingRun -Pgatling.simulationClass=TodoSimulation
+    ./gradlew gatlingRun --all
     ```
 
 ### Viewing Results
 
-After the Gatling load test completes, the results will be available in the `build/reports/gatling/<simulation-name>` directory. Open the `index.html` file in your browser to view a detailed report of the test results.
-
+After the Gatling load test completes, the results will be available in the `build/reports/gatling/<simulation-name>` directory.
+Open the `index.html` file in your browser to view a detailed report of the test results.
 
 ### Results with my hardware (VPS)
 
+VM provided for load testing was:
+
 ```text
 VPS OS: Ubuntu 20.04 x64
-1 CPU / 1024 Mb / 30 Gb / GEO: Russia (Moscow) <-> Georgia (Tbilisi)
+1 CPU / 1024 Mb / 30 Gb / GEO: Georgia (Tbilisi)
+```
 
+### Median result:
+
+```text
 ================================================================================
 ---- Global Information --------------------------------------------------------
-> request count                                       1650 (OK=1650   KO=0     )
-> min response time                                    154 (OK=154    KO=-     )
-> max response time                                    609 (OK=609    KO=-     )
-> mean response time                                   177 (OK=177    KO=-     )
-> std deviation                                         43 (OK=43     KO=-     )
-> response time 50th percentile                        166 (OK=166    KO=-     )
-> response time 75th percentile                        175 (OK=175    KO=-     )
-> response time 95th percentile                        231 (OK=231    KO=-     )
-> response time 99th percentile                        419 (OK=419    KO=-     )
-> mean requests/sec                                  40.24 (OK=40.24  KO=-     )
+> request count                                       1650 (OK=1633   KO=17    )
+> min response time                                    156 (OK=156    KO=10002 )
+> max response time                                  12828 (OK=12828  KO=10004 )
+> mean response time                                   478 (OK=379    KO=10003 )
+> std deviation                                       1453 (OK=1086   KO=1     )
+> response time 50th percentile                        173 (OK=173    KO=10003 )
+> response time 75th percentile                        202 (OK=200    KO=10004 )
+> response time 95th percentile                        650 (OK=532    KO=10004 )
+> response time 99th percentile                      10003 (OK=6957   KO=10004 )
+> mean requests/sec                                  40.24 (OK=39.83  KO=0.41  )
 ---- Response Time Distribution ------------------------------------------------
-> t < 800 ms                                          1650 (   100%)
-> 800 ms <= t < 1200 ms                                  0 (     0%)
-> t >= 1200 ms                                           0 (     0%)
-> failed                                                 0 (     0%)
+> t < 800 ms                                          1579 (  95.7%)
+> 800 ms <= t < 1200 ms                                  8 (  0.48%)
+> t >= 1200 ms                                          46 (  2.79%)
+> failed                                                17 (  1.03%)
+---- Errors --------------------------------------------------------------------
+> i.n.c.ConnectTimeoutException: connection timed out after 1000     17 (100,0%)
+0 ms: /185.143.179.57:8080
 ================================================================================
 ```
 
+![gatling-results](site/gatling.png)
+
+You can find results [here](site/GatlingStats_09_12_2024-16-05-24.html)
 
 ## Example Scenarios
 
 - **API Test Execution**:
-  - Functional testing of API endpoints.
+    - Functional testing of API endpoints.
 - **Load Testing**:
-  - Evaluate the system under:
-    - 10 requests per second (RPS).
-    - 100 RPS.
+    - Evaluate the system under requests per second (RPS):
+        - 5 RPS
+        - 10 RPS
+        - 50 RPS
+        - 100 RPS
 
 ## Additional Notes
 

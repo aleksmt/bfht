@@ -21,10 +21,6 @@ java {
   }
 }
 
-gatling {
-
-}
-
 dependencies {
     // Standard deps for testing + kotlin essentials
     testImplementation(kotlin("stdlib"))
@@ -59,5 +55,11 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
     maxParallelForks = 1
+    testLogging.showStandardStreams = true
+}
+
+gatling {
+  includeMainOutput = true
+  includeTestOutput = true
 }
 

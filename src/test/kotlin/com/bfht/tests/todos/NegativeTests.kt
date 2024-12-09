@@ -9,27 +9,27 @@ import kotlinx.coroutines.test.runTest
 /**
  * This is Todos Manager NEGATIVE test suite
  */
-class NegativeTests: SetupTests() {
+class NegativeTests : SetupTests() {
 
-  @Test
-  fun `add todo without payload = error`() = runTest {
-    val response = service.postTodos(Todo(id = null))
-    assertEquals(400, response.status.value)
-  }
+    @Test
+    fun `add todo without payload = error`() = runTest {
+        val response = service.postTodos(Todo(id = null))
+        assertEquals(400, response.status.value)
+    }
 
-  @Test
-  fun `modify todo without payload = error`() = runTest {
-    val response = service.putTodos(Todo())
-    assertEquals(400, response.status.value)
-  }
+    @Test
+    fun `modify todo without payload = error`() = runTest {
+        val response = service.putTodos(Todo())
+        assertEquals(400, response.status.value)
+    }
 
-  @Test
-  fun `wrong basic auth = error`() = runTest {
-    val todo = todo()
-    service.postTodos(todo)
+    @Test
+    fun `wrong basic auth = error`() = runTest {
+        val todo = todo()
+        service.postTodos(todo)
 
-    val response = service.deleteTodos(todo.id,"wrong", "wrong")
-    assertEquals(401, response.status.value)
-  }
+        val response = service.deleteTodos(todo.id, "wrong", "wrong")
+        assertEquals(401, response.status.value)
+    }
 
 }
