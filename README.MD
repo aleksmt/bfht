@@ -32,9 +32,9 @@ Before running the tests, you need to configure the project by following these s
 ### API Tests
 
 To run API tests, execute the following command:
-    ```shell
-    ./gradlew test
-    ```
+  ```shell
+  ./gradlew test
+  ```
 
 The results will be available in the `build/test-results/test` directory. Open the `.xml` files or use a test reporting tool to view the results.
 
@@ -44,7 +44,7 @@ The project uses Gatling for load testing. To execute load tests:
 
 1. Ensure you have properly configured `application.conf`.
 2. Run the following command:
-    ```
+    ```shell
     ./gradlew gatlingRun -Pgatling.simulationClass=TodoSimulation
     ```
 
