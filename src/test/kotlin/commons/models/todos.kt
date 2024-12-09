@@ -1,6 +1,5 @@
 package commons.models
 
-import java.math.BigInteger
 import kotlinx.serialization.Serializable
 
 typealias TodosList = List<Todo>

@@ -1,7 +1,6 @@
 package com.bfht.tests.todos
 
 import com.bfht.tests.SetupTests
-import commons.models.Todo
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlinx.coroutines.test.runTest
